@@ -140,33 +140,33 @@
     <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" style="padding-top: 16px;">
         <mat-form-field fxFlex="85" appearance="legacy">
             <mat-label>Description</mat-label>
-            <input id="measuredesc-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureDesc" matInput>      
+            <input name="description" id="measuredesc-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureDesc" matInput>      
           </mat-form-field>
     </div>
 </ng-template>
 <ng-template #editMeasureQty let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" *ngIf="!showFormula" style="padding-top: 16px;">
-      <input id="measureqty-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureQty" matInput>
+      <input name="qty" id="measureqty-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureQty" matInput>
     </mat-form-field>
 </ng-template>
 <ng-template #editMeasureWidth let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" *ngIf="!showFormula" style="padding-top: 16px;">
-      <input id="measurewidthy-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureWidth" matInput>
+      <input name="width" id="measurewidthy-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureWidth" matInput>
     </mat-form-field>
 </ng-template>
 <ng-template #editMeasureLength let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" *ngIf="!showFormula" style="padding-top: 16px;">
-      <input id="measurelength-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureLength" matInput>
+      <input name="length" id="measurelength-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureLength" matInput>
     </mat-form-field>
 </ng-template>
 <ng-template #editMeasureHeight let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" *ngIf="!showFormula" style="padding-top: 16px;">
-      <input id="measureheight-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureHeight" matInput>
+      <input name="height" id="measureheight-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureHeight" matInput>
     </mat-form-field>
 </ng-template>
 <ng-template #editMeasureTotalMeasure let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" style="padding-top: 16px;">
-      <input id="measuretotalmeasure-id" disabled [(ngModel)]="measureTotalMeasure" matInput>
+      <input name="totalMeasure" id="measuretotalmeasure-id" disabled [(ngModel)]="measureTotalMeasure" matInput>
     </mat-form-field>
 </ng-template>
 
