@@ -44,14 +44,27 @@ export class AppComponent implements OnInit {
 
   isExpanded:boolean = false;
 
+  //Binding dei campi delle singole voci
   billProgressive: number;
   billDescription: string;
   billCode:string;
   billQty:number;
   billPrice:number;
+  billDiscount:number;
   billTotal:number;
-  selectedMeasuresRow: BillOfMaterialsCostAnalysisMeauseresDTO;
+  //capitolato a prezzi unitari
+  showFieldCPU:boolean = false;  
+  billIncLabor:number;
+  billIncCharges:number;
+  billNetPrice:number;
+  billDecrease:number;
+  //capitolato a punti
+  showFieldPunti:boolean = false;
+  billPunti:number;
+  billFattValPunti:number;
 
+  selectedMeasuresRow: BillOfMaterialsCostAnalysisMeauseresDTO;
+  //binding dei campi delle misure
   measureDesc: string;
   measureQty: number;
   measureWidth: number;
@@ -67,14 +80,27 @@ export class AppComponent implements OnInit {
   childGrid: any;
   showEditField: boolean = true;
   totalOfBill: number = 0;
+  totalOffer: number = 0;
+  totalOfIncCharges: number = 0;
+  totalOfIncLabor: number = 0;
 
   //Validation Rules
+  progValidationRules:object;
   codeValidationRules: object;
   descriptionValidationRules: object;
   qtyValidationRules: object;
   priceValidationRules: object;
   totalValidationRules: object;
 
+  indexes; 
+  expandFlag: boolean = false; 
+
+  public items: MenuItemModel[] = [
+    {
+      text: 'Record',
+      id: 'newrecord',
+    },
+  ];
 
   //Data
   dataBill:BillOfMaterialsDTO[]=[];
@@ -195,9 +221,6 @@ export class AppComponent implements OnInit {
   detailDataBound(args) { 
     var toolbar = args.childGrid.element.querySelector('.e-toolbar'); 
     args.childGrid.element.appendChild(toolbar); 
-  }
-  dataBound() {
-    this.grid.autoFitColumns(['progressive', 'measureUnit', 'qty', 'price','total']);
   }
   async actionBegin(args: SaveEventArgs) {  
     if (args.requestType === 'beginEdit' || args.requestType === 'add') {
@@ -479,5 +502,48 @@ export class AppComponent implements OnInit {
 
     this.myData.billOfMaterialList = this.dataBill;
     this.myData.billOfMaterialsCostAnalysisMeauseresList = this.dataMeasures;
+  }
+  onPuntiFieldChange(event){
+    if(this.billFattValPunti != null && this.billFattValPunti != 0){
+      this.billPrice = this.billPunti * this.billFattValPunti;
+    }
+  }
+  onCPUFieldChange(event){
+    
+    this.cpuCalculate();
+
+  }
+  cpuCalculate():number{
+    let discountV = 0;
+    if(this.billDiscount != null && this.billDiscount != 0)
+      discountV = this.billPrice * this.billDiscount / 100;
+
+    this.billNetPrice = this.billPrice - discountV;
+
+    let labV = 0;
+    if(this.billIncLabor != null && this.billIncLabor != 0){
+      labV = this.billNetPrice * this.billIncLabor / 100;
+    }
+    
+    let chargesV = 0;
+    if(this.billIncCharges != null && this.billIncCharges != 0) {
+        chargesV = this.billNetPrice * this.billIncCharges / 100;
+    }
+    this.billNetPrice = this.billNetPrice - labV - chargesV;
+    return this.billNetPrice;
+  }
+  dataBound(event) {
+    if (this.expandFlag && this.indexes.length !== 0) { 
+      // Condition executes on global flag enabled case 
+      // The global flag is disabled so that this case is not executed on consecutive event triggers 
+      this.expandFlag = false; 
+      // Each stored parent row index is expanded 
+      this.indexes.forEach(ind => this.grid.detailRowModule.expand(ind)); 
+      this.indexes = []; 
+    } 
+    //this.grid.autoFitColumns(['progressive', 'measureUnit', 'qty', 'price','total']);
+  }
+  public itemBeforeEvent (args: MenuEventArgs) {
+    
   }
 }

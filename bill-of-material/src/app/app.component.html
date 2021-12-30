@@ -1,139 +1,236 @@
 <ejs-grid style="width: 100%;" #grid
-          [dataSource]='myData.billOfMaterialList'                             
-          [allowPaging]="true" 
-          [pageSettings]='pageSettings' 
-          [allowSorting]="true" 
-          [allowFiltering]="false"
-          [editSettings]='editSettings'                                       
-          [sortSettings]='sortOptions' 
-          [allowReordering]='true'
-          [allowResizing]='true' 
-          [showColumnChooser]= 'true' 
-          [allowRowDragAndDrop]='true' 
-          allowTextWrap='true' 
-          [textWrapSettings]='wrapSettings'
-          (actionBegin)='actionBegin($event)'
-          [childGrid]='childGrid'
-          (rowDataBound)="rowDataBound($event)"
-          (queryCellInfo)='customiseCell($event)'
-          (rowDrop)="rowDrop($event)"   
-          (detailDataBound)="detailDataBound($event)" 
-          (toolbarClick)='clickHandler($event)'                                  
-          >
-        <ng-template #toolbarTemplate let-data>
-            <ejs-toolbar (clicked)='clickHandler($event)'>
-                <e-items>
-                    <e-item>
-                        <ng-template #template>
-                            
-                          </ng-template>
-                    </e-item>
-                    <e-item id='expandall' text='Show/Hide Measures' prefixIcon='e-expand'></e-item>
-                </e-items>
-            </ejs-toolbar>
-        </ng-template>
-    <e-columns>
-        <e-column field='progressive' defaultValue= '{{bill?.billOfMaterialList.length + 1}}' headerText='' textAlign='Left' width=7%>
-            <ng-template #editTemplate let-data>
-                <mat-form-field appearance="legacy" fxFlex="100" >                                        
-                    <input type="number" min="1" max="{{bill?.billOfMaterialList.length}}" [(ngModel)]='billProgressive' matInput>                                
-                </mat-form-field>
-            </ng-template>          
-        </e-column>
-        <e-column field='code' headerText='Codice' width=10%>
-            <ng-template #editTemplate let-data>
-                <div *ngIf="showEditField==true">
-                    <mat-form-field  appearance="outline" fxFlex="100">
-                        <mat-label>Code</mat-label>
-                        <input [(ngModel)]='billCode' matInput>                                
-                    </mat-form-field>
-                </div>
-                
-            </ng-template>
-        </e-column>
-        <e-column field='description' headerText='Descrizione' textAlign='Left' width=40% clipMode='Ellipsis' [disableHtmlEncode]='false'>
-            <ng-template #editTemplate let-data>
-                <ejs-richtexteditor style="margin-top:5px; margin-bottom:5px" id='iframeRTE' [toolbarSettings]='tools' [iframeSettings]='iframe' [(ngModel)]='billDescription'>
-                </ejs-richtexteditor>
-            </ng-template>
-        </e-column>
-        <e-column field='measureUnit' headerText='UM' textAlign='Left' width=10%>
-            <ng-template #editTemplate let-data>
-                <div *ngIf="showEditField==true">
-                    <!--<mat-form-field appearance="outline" fxFlex="100">
-                        <mat-label>Um</mat-label>
-                        <input [formControl]="umCtrl" [matAutocomplete]="autoUm" matInput>                                                
-                        <mat-autocomplete #autoUm="matAutocomplete" [displayWith]="this._autocompleteUtilities.displayFn('unitSize',this.tabUM,true)">
-                        <mat-option *ngFor="let u of filteredUm$ | async" [value]="u">
-                            <span class="body-1">{{ u.unitSize }}</span>
-                        </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>-->
-                </div>                                                                                        
-            </ng-template>   
-        </e-column>                           
-        <e-column field='qty' headerText='Qtà' width=10% textAlign='Right'>
-            <ng-template #editTemplate let-data>
-                <div *ngIf="showEditField==true">
-                    <mat-form-field appearance="outline" fxFlex="100" >
-                        <mat-label>qty</mat-label>
-                        <input type="number" [(ngModel)]='billQty' (change)="onQtyPriceChange($event)" matInput>                                
-                    </mat-form-field>
-                </div>                                            
-            </ng-template>
-        </e-column>                                    
-        <e-column field='price' headerText='Prezzo' textAlign='Right' format='C2' width=10%>
-            <ng-template #editTemplate let-data>
-                <div *ngIf="showEditField==true">
-                    <mat-form-field appearance="outline" fxFlex="100" >
-                        <mat-label>price</mat-label>
-                        <input type="number" (change)="onQtyPriceChange($event)" [(ngModel)]='billPrice' matInput>                                
-                    </mat-form-field>
-                </div>                                            
-            </ng-template>                                        
-        </e-column>   
-        <e-column field='total' [allowEditing]= 'false' headerText='Totale' textAlign='Right' format='C2' width=10%>
-            <ng-template #editTemplate let-data>
-                <div *ngIf="showEditField==true">
-                    <mat-form-field appearance="outline"  fxFlex="100">
-                        <mat-label>total</mat-label>
-                        <input type="number" disabled [(ngModel)]='billTotal' matInput>                                
-                    </mat-form-field>
-                </div>                                            
-            </ng-template>   
-        </e-column>         
-        <e-column headerText='' width=120 [commands]='commands' width=5%></e-column>                                                               
-    </e-columns>
-    <e-aggregates>
-        <e-aggregate>
-            <e-columns>
-                <e-column field="measureUnit" type="sum">
-                    <ng-template #footerTemplate let-data>
-                        <p style="font-weight: bold;">totals</p>
-                    </ng-template>
-                </e-column>
+                                      [allowResizing]='true'
+                                      [dataSource]='myData.billOfMaterialList'                                                                   
+                                      [pageSettings]='pageSettings' 
+                                      [allowSorting]="true" 
+                                      [allowFiltering]="false"
+                                      [editSettings]='editSettings'                                       
+                                      [sortSettings]='sortOptions' 
+                                      [allowReordering]='true'
+                                      [allowResizing]='true' 
+                                      [showColumnChooser]= 'true' 
+                                      [allowRowDragAndDrop]='true' 
+                                      allowTextWrap='true' 
+                                      [textWrapSettings]='wrapSettings'
+                                      (actionBegin)='actionBegin($event)'
+                                      [childGrid]='childGrid'
+                                      (rowDataBound)="rowDataBound($event)"
+                                      (queryCellInfo)='customiseCell($event)'
+                                      (rowDrop)="rowDrop($event)"   
+                                      (detailDataBound)="detailDataBound($event)" 
+                                      (toolbarClick)='clickHandler($event)'
+                                      (dataBound)='dataBound($event)'>                                    
+                                <e-columns>
+                                    <e-column field='progressive' defaultValue= '{{bill?.billOfMaterialList.length + 1}}' headerText='' textAlign='Left' width=7%>
+                                        <ng-template #editTemplate let-data>
+                                            <mat-form-field appearance="legacy" fxFlex="100" >                                        
+                                                <input type="number" min="1" max="{{bill?.billOfMaterialList.length}}" [(ngModel)]='billProgressive' matInput>                                
+                                            </mat-form-field>
+                                        </ng-template>          
+                                    </e-column>
+                                    <e-column field='code' headerText='Codice' width=10%>
+                                        <ng-template #editTemplate let-data>
+                                            <div *ngIf="showEditField==true">
+                                                <mat-form-field  appearance="outline" fxFlex="100">
+                                                    <mat-label>Code</mat-label>
+                                                    <input [(ngModel)]='billCode' matInput>                                
+                                                </mat-form-field>
+                                            </div>                                            
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column field='description' headerText='Descrizione' textAlign='Left' width=30% clipMode='Ellipsis' [disableHtmlEncode]='false'>
+                                        <ng-template #editTemplate let-data>
+                                            <ejs-richtexteditor style="margin-top:5px; margin-bottom:5px" id='iframeRTE' [toolbarSettings]='tools' [iframeSettings]='iframe' [(ngModel)]='billDescription'>
+                                            </ejs-richtexteditor>
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column field='measureUnit' headerText='UM' textAlign='Left' width=10%>
+                                        <ng-template #editTemplate let-data>
+                                            <div *ngIf="showEditField==true">
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" style="padding-top: 16px;">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label>UM</mat-label>
+                                                        <input  matInput>
+                                                    </mat-form-field>                                                    
+                                                </div>
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFieldCPU">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label>Manodopera %</mat-label>
+                                                        <input type="number" [(ngModel)]='billIncLabor' (change)="onCPUFieldChange($event)" matInput>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFieldPunti">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label>Punti</mat-label>
+                                                        <input type="number" [(ngModel)]='billPunti' (change)="onPuntiFieldChange($event)" matInput>
+                                                    </mat-form-field>
+                                                </div>                                                
+                                            </div>                                                                                        
+                                        </ng-template>   
+                                    </e-column>                           
+                                    <e-column field='qty' headerText='Qtà' width=10% textAlign='Right'>
+                                        <ng-template #editTemplate let-data>
+                                            <div *ngIf="showEditField==true">
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" style="padding-top: 16px;">
+                                                    <mat-form-field appearance="outline" fxFlex="100" >
+                                                        <mat-label>Qty</mat-label>
+                                                        <input type="number" [(ngModel)]='billQty' (change)="onQtyPriceChange($event)" matInput>                                
+                                                    </mat-form-field>
+                                                </div>
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFieldCPU">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label>Oneri %</mat-label>
+                                                        <input type="number" [(ngModel)]='billIncCharges' (change)="onCPUFieldChange($event)" matInput>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFieldPunti">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label>Fatt. Val. Punti</mat-label>
+                                                        <input type="number" [(ngModel)]='billFattValPunti' (change)="onPuntiFieldChange($event)" matInput>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>                                            
+                                        </ng-template>
+                                    </e-column>                                    
+                                    <e-column field='price' headerText='Prezzo' textAlign='Right' format='C2' width=20%>
+                                        <ng-template #editTemplate let-data>
+                                            <div *ngIf="showEditField==true">
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" style="padding-top: 16px;">
+                                                    <mat-form-field appearance="outline" fxFlex="60" >
+                                                        <mat-label>Price</mat-label>
+                                                        <input type="number" (change)="onQtyPriceChange($event)" [(ngModel)]='billPrice' matInput>                                
+                                                    </mat-form-field>
+                                                    <mat-form-field appearance="outline" fxFlex="40" >
+                                                        <mat-label>Discount</mat-label>
+                                                        <input type="number" [(ngModel)]='billDiscount' (change)="onQtyPriceChange($event)" matInput>                                
+                                                    </mat-form-field>
+                                                </div>
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFieldCPU">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label>Prezzo netto</mat-label>
+                                                        <input type="number" [(ngModel)]='billNetPrice' disabled matInput>
+                                                    </mat-form-field>
+                                                </div>
+                                                <!-- Questo blocco non fa niente ma lo inserisco in modo da allineare correttamente gli input nel caso si scelga il capitolato a punti -->
+                                                <!-- Altrimenti verrebbero allineati in maniera sfalsata (alcuni sopra altri sotto) -->
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFieldPunti" style="visibility: hidden;">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label></mat-label>
+                                                        <input disabled matInput>
+                                                    </mat-form-field>
+                                                </div>
+                                                <!---->
+                                            </div>                                            
+                                        </ng-template>                                        
+                                    </e-column>   
+                                    <e-column field='total' [allowEditing]= 'false' headerText='Totale' textAlign='Right' format='C2' width=10%>
+                                        <ng-template #editTemplate let-data>
+                                            <div *ngIf="showEditField==true">
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" style="padding-top: 16px;">
+                                                    <mat-form-field appearance="outline"  fxFlex="100">
+                                                        <mat-label>Total</mat-label>
+                                                        <input type="number" disabled [(ngModel)]='billTotal' matInput>                                
+                                                    </mat-form-field>
+                                                </div>
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFieldCPU">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label>Ribasso %</mat-label>
+                                                        <input type="number" [(ngModel)]='billDecrease' matInput>
+                                                    </mat-form-field>
+                                                </div>  
+                                                <!-- Questo blocco non fa niente ma lo inserisco in modo da allineare correttamente gli input nel caso si scelga il capitolato a punti -->
+                                                <!-- Altrimenti verrebbero allineati in maniera sfalsata (alcuni sopra altri sotto) -->
+                                                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFieldPunti" style="visibility: hidden;">
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label></mat-label>
+                                                        <input disabled matInput>
+                                                    </mat-form-field>
+                                                </div>
+                                                <!---->                                              
+                                            </div>                                            
+                                        </ng-template>   
+                                    </e-column>         
+                                    <e-column headerText='' width=120 [commands]='commands' width=5%></e-column>                                                               
+                                </e-columns>
+                                <ng-template #toolbarTemplate let-data>
+                                    <ejs-toolbar (clicked)='clickHandler($event)'>
+                                        <e-items>
+                                            <e-item>
+                                                <ng-template #template>
+                                                    <button ejs-dropdownbutton [items]='items' 
+                                                                               content='Aggiungi'
+                                                                               iconCss='e-icons e-menu'                                                                                                                                                                   
+                                                                               (beforeItemRender)='itemBeforeEvent($event)'
+                                                                               (select)='onNewRecorsSelect($event)'>
+                                                    </button>
+                                                </ng-template>
+                                            </e-item>
+                                            <e-item id='expandall' text='Show/Hide Measures' prefixIcon='e-expand'></e-item>
+                                            <e-item id='cpu' text='Cap. a prezzi unitari' prefixIcon='e-menu'></e-item>
+                                            <e-item id='punti' text='Cap. a Punti' prefixIcon='e-menu'></e-item>
+                                        </e-items>
+                                    </ejs-toolbar>
+                                </ng-template>
+                                <!--<e-aggregates>
+                                    <e-aggregate>
+                                        <e-columns>                                        
+                                            <e-column field="description" type="sum">
+                                                <ng-template #footerTemplate let-data>
+                                                    <p style="font-weight: bold;">Totale Lavori: {{this.totalOfBill}}</p>  
+                                                    <p style="font-weight: bold;">Totale Offerta: {{this.totalOffer}}</p>    
+                                                    <p style="font-weight: bold;">Oneri di Sicurezza: {{this.totalOfBill}}</p>                                                      
+                                                    <p style="font-weight: bold;">Manodopera: {{this.totalOfBill}}</p>                                                      
+                                                </ng-template>
+                                            </e-column>
 
-                <e-column field="qty" type="sum">
-                    <ng-template #footerTemplate let-data>
-                        <p style="font-weight: bold;">{{data.sum}}</p>
-                    </ng-template>
-                </e-column>
-
-                <e-column field="price" type="sum">
-                    <ng-template #footerTemplate let-data>
-                        <p style="font-weight: bold;">{{data.sum}}</p>
-                    </ng-template>
-                </e-column>
-
-                <e-column field="total" type="sum">
-                    <ng-template #footerTemplate let-data>
-                        <p style="font-weight: bold;">{{this.totalOfBill}} </p>
-                    </ng-template>
-                </e-column>
-            </e-columns>
-        </e-aggregate>
-    </e-aggregates>
-</ejs-grid>
+                                            <e-column field="total" type="sum">
+                                                <ng-template #footerTemplate let-data>                                                    
+                                                    <p style="font-weight: bold;">{{this.totalOfBill}} </p> 
+                                                    <p style="font-weight: bold;">{{this.totalOffer}} </p>  
+                                                    <p style="font-weight: bold;">{{this.totalOfBill}} </p> 
+                                                    <p style="font-weight: bold;">{{this.totalOfBill}} </p>                                                   
+                                                </ng-template>
+                                            </e-column>
+                                        </e-columns>
+                                    </e-aggregate>
+                                </e-aggregates> -->                               
+                            </ejs-grid>
+                            <ejs-toolbar (clicked)='clickHandler($event)'>
+                                <e-items>
+                                    <e-item>
+                                        <ng-template #template>
+                                            <button ejs-dropdownbutton [items]='items' 
+                                                                       content='Aggiungi'
+                                                                       iconCss='e-icons e-menu'                                                                                                                                                                   
+                                                                       (beforeItemRender)='itemBeforeEvent($event)'
+                                                                       (select)='onNewRecorsSelect($event)'>
+                                            </button>
+                                         </ng-template>
+                                    </e-item>
+                                    <e-item id='expandall_2' text='Show/Hide Measures' prefixIcon='e-expand'></e-item>
+                                    <e-item id='cpu_2' text='Cap. a prezzi unitari' prefixIcon='e-menu'></e-item>
+                                    <e-item id='punti_2' text='Cap. a Punti' prefixIcon='e-menu'></e-item>
+                                </e-items>
+</ejs-toolbar>
+<!--Card dei totali
+<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid">                         
+    <mat-form-field style="display: block; margin: 0 auto; text-align: right;" appearance="legacy"> 
+        <mat-label>Totale Lavori</mat-label>                           
+        <input [(ngModel)]="totalOfBill" matInput readonly>                            
+    </mat-form-field>
+    <mat-form-field style="display: block; margin: 0 auto; text-align: right;" appearance="legacy"> 
+        <mat-label>Totale Offerta</mat-label>                           
+        <input [(ngModel)]="totalOffer" matInput readonly>                            
+    </mat-form-field>
+    <mat-form-field style="display: block; margin: 0 auto; text-align: right;" appearance="legacy"> 
+        <mat-label>Oneri di Sicurezza</mat-label>                           
+        <input [(ngModel)]="totalOfIncCharges" matInput readonly>                            
+    </mat-form-field>
+    <mat-form-field style="display: block; margin: 0 auto; text-align: right;" appearance="legacy"> 
+        <mat-label>Manodopera</mat-label>                           
+        <input [(ngModel)]="totalOfIncLabor" matInput readonly>                            
+    </mat-form-field>                           
+</div> -->
 
 <!-- Template dei campi misure quando si entra in modifica -->
 <ng-template #editMeasureDescription let-data> 
@@ -142,11 +239,24 @@
             <mat-label>Description</mat-label>
             <input name="description" id="measuredesc-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureDesc" matInput>      
           </mat-form-field>
+      
+          <div fxFlex="15" appearance="legacy">
+              <mat-checkbox [(ngModel)]="showFormula" (change)="onCheckFormulaChange($event)" style="display: flex;align-self: left; margin-top: 15px;margin-left: 15px;"> Formula</mat-checkbox>
+          </div>
     </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" *ngIf="showFormula">
+        <mat-form-field fxFlex="85" appearance="legacy">
+            <mat-label>Formula</mat-label>
+            <input name="measure" [(ngModel)]="measureFormula" (change)="onFormulaChange()" matInput>      
+        </mat-form-field>
+    </div>
+
+    
+
 </ng-template>
 <ng-template #editMeasureQty let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" *ngIf="!showFormula" style="padding-top: 16px;">
-      <input name="qty" id="measureqty-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureQty" matInput>
+      <input name="qty"  id="measureqty-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureQty" matInput>
     </mat-form-field>
 </ng-template>
 <ng-template #editMeasureWidth let-data> 
@@ -156,17 +266,17 @@
 </ng-template>
 <ng-template #editMeasureLength let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" *ngIf="!showFormula" style="padding-top: 16px;">
-      <input name="length" id="measurelength-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureLength" matInput>
+      <input name="length"  id="measurelength-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureLength" matInput>
     </mat-form-field>
 </ng-template>
 <ng-template #editMeasureHeight let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" *ngIf="!showFormula" style="padding-top: 16px;">
-      <input name="height" id="measureheight-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureHeight" matInput>
+      <input name="height"  id="measureheight-id" (change)="onMeasureDetailChange()" [(ngModel)]="measureHeight" matInput>
     </mat-form-field>
 </ng-template>
 <ng-template #editMeasureTotalMeasure let-data> 
     <mat-form-field fxFlex="100" appearance="legacy" style="padding-top: 16px;">
-      <input name="totalMeasure" id="measuretotalmeasure-id" disabled [(ngModel)]="measureTotalMeasure" matInput>
+      <input name="totalm" id="measuretotalmeasure-id" disabled [(ngModel)]="measureTotalMeasure" matInput>
     </mat-form-field>
 </ng-template>
 
