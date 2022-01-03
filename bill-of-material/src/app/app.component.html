@@ -28,7 +28,7 @@
                                             </mat-form-field>
                                         </ng-template>          
                                     </e-column>
-                                    <e-column field='code' headerText='Codice' width=10%>
+                                    <e-column field='code' headerText='Codice' width=10% [validationRules]='codeValidationRules'>
                                         <ng-template #editTemplate let-data>
                                             <div *ngIf="showEditField==true">
                                                 <mat-form-field  appearance="outline" fxFlex="100">
